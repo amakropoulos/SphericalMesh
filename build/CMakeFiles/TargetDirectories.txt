@@ -1,0 +1,12 @@
+/home/benuix/Setup/SphericalMesh/build/CMakeFiles/edit_cache.dir
+/home/benuix/Setup/SphericalMesh/build/CMakeFiles/rebuild_cache.dir
+/home/benuix/Setup/SphericalMesh/build/ThirdParty/FastMarching/src/CMakeFiles/edit_cache.dir
+/home/benuix/Setup/SphericalMesh/build/ThirdParty/FastMarching/src/CMakeFiles/rebuild_cache.dir
+/home/benuix/Setup/SphericalMesh/build/ThirdParty/FastMarching/src/CMakeFiles/fastMarchingGeodesic.dir
+/home/benuix/Setup/SphericalMesh/build/src/CMakeFiles/edit_cache.dir
+/home/benuix/Setup/SphericalMesh/build/src/CMakeFiles/rebuild_cache.dir
+/home/benuix/Setup/SphericalMesh/build/src/CMakeFiles/sphericalMesh.dir
+/home/benuix/Setup/SphericalMesh/build/tools/CMakeFiles/edit_cache.dir
+/home/benuix/Setup/SphericalMesh/build/tools/CMakeFiles/rebuild_cache.dir
+/home/benuix/Setup/SphericalMesh/build/tools/CMakeFiles/mesh-to-sphere.dir
+/home/benuix/Setup/SphericalMesh/build/tools/CMakeFiles/volume-to-mesh.dir
