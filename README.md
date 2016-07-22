@@ -1,6 +1,6 @@
 Spherical Projection Tools
 ==========================================
-Spherical projections tools by Robert Wright:
+Spherical projections tools developed by Robert Wright:
 - Sphere deflation to a volumetric mask
 - Projection of a mesh to sphere
 
