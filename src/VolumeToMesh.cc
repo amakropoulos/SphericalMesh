@@ -244,11 +244,8 @@ void VolumeToMesh::InitializeFilters(){
   _normalFilter->SplittingOff();
   _normalFilter->AutoOrientNormalsOff() ;
   _normalFilter->ConsistencyOn();
-  _remeshFilter->SetMaxEdgeLength(2*_averageEdgeLengthMM/_resolution);
-  _remeshFilter->SetMinEdgeLength(0.5*_averageEdgeLengthMM/_resolution);
-  //MIRTK Remeshing
-  // _remeshFilter->MaxEdgeLength(2*_averageEdgeLengthMM/_resolution);
-  // _remeshFilter->MinEdgeLength(0.5*_averageEdgeLengthMM/_resolution);
+  _remeshFilter->MaxEdgeLength(2*_averageEdgeLengthMM/_resolution);
+  _remeshFilter->MinEdgeLength(0.5*_averageEdgeLengthMM/_resolution);
   _smoothingFilter->SetLambda(_smoothing);
   _smoothingFilter->SetSigma(0);
   _smoothingFilter->SetPointWeighting(_smoothArrayName);
@@ -1504,11 +1501,8 @@ void VolumeToMesh::Subdivide(){
   subdivisionFilter->Update();
   _mesh=subdivisionFilter->GetOutput();
   _averageEdgeLengthMM=_averageEdgeLengthMM/2;
-  _remeshFilter->SetMaxEdgeLength((_averageEdgeLengthMM/_resolution)*2);
-  _remeshFilter->SetMinEdgeLength(_averageEdgeLengthMM/_resolution/2);
-  //MIRTK Remeshing
-  // _remeshFilter->MaxEdgeLength((_averageEdgeLengthMM/_resolution)*2);
-  // _remeshFilter->MinEdgeLength(_averageEdgeLengthMM/_resolution/2);
+  _remeshFilter->MaxEdgeLength((_averageEdgeLengthMM/_resolution)*2);
+  _remeshFilter->MinEdgeLength(_averageEdgeLengthMM/_resolution/2);
   _smoothing=_smoothing*2;
 }
 
@@ -1673,12 +1667,16 @@ void VolumeToMesh::DeformMeshToTarget(){
 
 }
 
+
 //original remeshing
 void VolumeToMesh::Remesh(){
   Remesher remeshFilter;
-  remeshFilter.SetMaxEdgeLength(2*_averageEdgeLengthMM/_resolution);
-  remeshFilter.SetMinEdgeLength(0.8*_averageEdgeLengthMM/_resolution);
-  vtkSmartPointer<vtkPolyData> remeshed = remeshFilter.Remesh(_mesh);
+  remeshFilter.Input(_mesh);
+  remeshFilter.MaxEdgeLength(2*_averageEdgeLengthMM/_resolution);
+  remeshFilter.MinEdgeLength(0.8*_averageEdgeLengthMM/_resolution);
+  remeshFilter.Verbose(true);
+  remeshFilter.Run();
+  vtkSmartPointer<vtkPolyData> remeshed = remeshFilter.Output();
 
   _mesh = NULL;
   _mesh = vtkSmartPointer<vtkPolyData>::New();

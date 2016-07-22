@@ -9,7 +9,6 @@
 #include "mirtk/EulerMethodWithMomentum.h"
 #include "mirtk/MetricDistortion.h"
 #include "mirtk/PointSetUtils.h"
-#include "mirtk/MeshToSphereRemesher.h"
 #include "mirtk/SparseMatrix.h"
 #include "mirtk/MeshSmoothing.h"
 
@@ -18,6 +17,7 @@
 #include "mirtk/M2SConnectivity.h"
 #include "mirtk/M2SOptimizer.h"
 #include "mirtk/M2SDiffuser.h"
+#include "mirtk/Remesher.h"
 
 //vtk includes
 #include <vtkSmartPointer.h>
