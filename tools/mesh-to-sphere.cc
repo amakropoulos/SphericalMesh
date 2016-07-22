@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 
   // Read input point set
   FileOption fopt = FO_ASCII;
-  vtkSmartPointer<vtkPolyData> input = ReadPolyData(POSARG(1), fopt);
+  vtkSmartPointer<vtkPolyData> input = ReadPolyData(POSARG(1));
 
   // Optional arguments
   string parin = "";
