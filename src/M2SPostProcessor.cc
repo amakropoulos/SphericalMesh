@@ -17,7 +17,6 @@
 #include "mirtk/M2SConnectivity.h"
 #include "mirtk/M2SOptimizer.h"
 #include "mirtk/M2SDiffuser.h"
-#include "mirtk/Remesher.h"
 
 //vtk includes
 #include <vtkSmartPointer.h>

@@ -1669,7 +1669,7 @@ void VolumeToMesh::DeformMeshToTarget(){
 
 
 //original remeshing
-void VolumeToMesh::Remesh(){
+/*void VolumeToMesh::Remesh(){
   Remesher remeshFilter;
   remeshFilter.Input(_mesh);
   remeshFilter.MaxEdgeLength(2*_averageEdgeLengthMM/_resolution);
@@ -1677,6 +1677,18 @@ void VolumeToMesh::Remesh(){
   remeshFilter.Verbose(true);
   remeshFilter.Run();
   vtkSmartPointer<vtkPolyData> remeshed = remeshFilter.Output();
+
+  _mesh = NULL;
+  _mesh = vtkSmartPointer<vtkPolyData>::New();
+  _mesh->DeepCopy(remeshed);
+  _mesh = remeshed;
+}*/
+
+void VolumeToMesh::Remesh(){
+  Remesher remeshFilter;
+  remeshFilter.MaxEdgeLength(2*_averageEdgeLengthMM/_resolution);
+  remeshFilter.MinEdgeLength(0.8*_averageEdgeLengthMM/_resolution);
+  vtkSmartPointer<vtkPolyData> remeshed = remeshFilter.Remesh(_mesh);
 
   _mesh = NULL;
   _mesh = vtkSmartPointer<vtkPolyData>::New();

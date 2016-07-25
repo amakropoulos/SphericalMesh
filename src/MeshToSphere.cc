@@ -10,7 +10,7 @@
 #include "mirtk/MetricDistortion.h"
 #include "mirtk/PointSetUtils.h"
 #include "mirtk/PointSetIO.h"
-#include "mirtk/Remesher.h"
+#include "mirtk/M2SRemesher.h"
 #include "mirtk/SparseMatrix.h"
 
 //my mirtk includes
