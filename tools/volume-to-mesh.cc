@@ -64,6 +64,7 @@ void usage(){
 int main(int argc, char **argv){
 
   InitialMesh initialMesh = sphere;
+  InitializeIOLibrary();
 
   if (argc < 3) {
         usage();
