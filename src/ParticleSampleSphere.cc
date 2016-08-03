@@ -169,7 +169,6 @@ void ParticleSampleSphere::OptimizeParticlePositions(vtkSmartPointer<vtkPoints> 
   double geoDist,totalEnergy,energy,energyNew,energyOld,totalEnergyOld,dEnergy,dot;
   double djx,djy,djz,dj,dx,dy,dz,nx,ny,nz,tx,ty,tz,xNew,yNew,zNew;
   double normalize;
-  double * stepSize;
   bool updating,adaptiveStepSize;
   s=1;
   adaptiveStepSize=true;
@@ -183,10 +182,10 @@ void ParticleSampleSphere::OptimizeParticlePositions(vtkSmartPointer<vtkPoints> 
   Matrix energyMatrix(numPoints,numPoints);
   totalEnergy=0;
 
-  stepSize = new double [numPoints];
+  double stepSize[numPoints];
 
   std::vector<double> energyI;
-  std::vector<double> sortIdx;
+  std::vector<int> sortIdx;
   energyI.resize(numPoints);
   sortIdx.resize(numPoints);
 
@@ -437,8 +436,6 @@ void ParticleSampleSphere::OptimizeParticlePositions(vtkSmartPointer<vtkPoints> 
      iteration=iteration+1;
 
    }
-
-  delete [] stepSize;
 }
 
 /*
@@ -554,6 +551,13 @@ vtkSmartPointer<vtkPolyData> ParticleSampleSphere::GetSphere(){
   SphereQuadrisect sq;
 
   points=StratifiedSample();
+  // AM_DEBUG
+//   double p[3];
+//  for (int j=0;j<points->GetNumberOfPoints();j++){
+//     points->GetPoint(j,p);
+//     for(int i=0;i<3;i++) p[i]= round( p[i] * 1000.0 ) / 1000.0;
+//     points->SetPoint(j,p);
+// }
   OptimizeParticlePositions(points);
 
 
