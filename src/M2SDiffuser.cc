@@ -183,7 +183,7 @@ void M2SDiffuser::Run(){
 
         _Output->GetPoints()->SetPoint(ptId, pt);
 
-        if (pt[0] == 0 || pt[1] == 0 || pt[2] == 0){
+        if (pt[0] == 0 && pt[1] == 0 && pt[2] == 0){
           cout << "ptId" << ptId << endl;
           cout << "zero coorindate!" << endl;
           exit(1);
