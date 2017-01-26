@@ -304,8 +304,6 @@ void MeshToSphere::LowPassFilter(vtkPolyData * mesh){
 }
 */
 
-
-
 void MeshToSphere::Remesh(double minEdgeLength, double maxEdgeLength, bool mapPoints){
 
   int maxIterations = 100;
@@ -335,6 +333,10 @@ void MeshToSphere::Remesh(double minEdgeLength, double maxEdgeLength, bool mapPo
   Array<int> mapping;
 
 
+
+
+/*
+// Original code by Rob
   for (int nid=0; nid<numNewPts; nid++) {
     //replace remeshed point with nearest mesh point
     newMesh->GetPoint(nid, np);
@@ -351,7 +353,6 @@ void MeshToSphere::Remesh(double minEdgeLength, double maxEdgeLength, bool mapPo
   _MeshHierarchy.push_back(newMesh);
   _PtIdHierarchy.push_back(mapping);
 
-
   OrderedSet<int> seen;
   for (auto id: mapping){
     if (seen.find(id) != seen.end()){
@@ -360,7 +361,107 @@ void MeshToSphere::Remesh(double minEdgeLength, double maxEdgeLength, bool mapPo
       exit(1);
     }
     seen.insert(id);
+  }
+  */
 
+
+
+
+  int nid, id;
+  double dist, maxdist=-1;
+  OrderedMap< double , Pair<int, int> > mappingDist;
+  for (nid=0; nid<numNewPts; nid++) {
+    //replace remeshed point with nearest mesh point
+    newMesh->GetPoint(nid, np);
+    id = tree->FindClosestPoint(np);
+    _Input->GetPoint(id, p);
+    dist = sqrt(vtkMath::Distance2BetweenPoints(p, np));
+
+    Pair<int,int> pair = MakePair(nid, id);
+    mappingDist[dist] = pair;
+    mapping.push_back(id);
+
+    if(dist>maxdist) maxdist=dist;
+  }
+
+  OrderedSet<int> seen;
+  for(auto iter: mappingDist){
+    nid=iter.second.first;
+    id=iter.second.second;
+
+    // if we have a point in the old mesh already assigned 
+    // find iteratively points connected to the original 
+    // and use the first unassigned with the closest distance
+    if (seen.find(id) != seen.end()){
+      newMesh->GetPoint(nid, np);
+      dist=iter.first;
+
+      int pointid, nnpointid;
+      double pointdist, nnpointdist;
+      bool found = false;
+
+      OrderedMap<double, int > nnpoints;
+      OrderedSet<int> visited;
+      nnpoints[dist] = id;
+
+      while(nnpoints.size()>0){
+        auto it=nnpoints.begin();
+        pointdist = it->first;
+        pointid = it->second;
+        nnpoints.erase(it);    
+        if(visited.find(pointid) != visited.end()) continue;
+        visited.insert(pointid);    
+
+        if(seen.find(pointid) != seen.end()){
+          vtkSmartPointer<vtkIdList> cellIds = vtkSmartPointer<vtkIdList>::New();
+          _Input->GetPointCells(pointid, cellIds);
+          for (int i=0; i<cellIds->GetNumberOfIds(); i++){
+            vtkSmartPointer<vtkIdList> pointIds = vtkSmartPointer<vtkIdList>::New();
+            _Input->GetCellPoints(cellIds->GetId(i), pointIds);
+            for (int j=0; j<pointIds->GetNumberOfIds(); j++){
+              nnpointid=pointIds->GetId(j);
+              if(visited.find(nnpointid) != visited.end()) continue;
+              _Input->GetPoint(nnpointid, p);
+              nnpointdist = sqrt(vtkMath::Distance2BetweenPoints(p, np));
+              nnpoints[nnpointdist] = nnpointid;
+            }
+          }
+        }else{
+          found = true;
+          break;
+        }
+      }
+
+
+      // The distance must be within the range of the existing distances
+      if( found && pointdist <= 1.5*maxdist ){
+        cout<<"replaced id due to duplicate for point in new mesh "<<nid<<": point in old mesh "<<id<<"->"<<pointid<<",  distance "<<dist<<"->"<<pointdist<<endl;
+        cout<<"maxdist: "<<maxdist<<endl;
+        id = pointid;
+        mapping[nid]=id;
+      }
+      // otherwise fail
+      else{
+        cout << "ERROR: MeshToSphere::Remesh - duplicate id in remeshing" << endl;
+        cout << "TODO: modify code so that each vertex is assigned a unique vertex in the parent mesh" << endl;
+        exit(1);
+      }
+    }
+
+    seen.insert(id);
+  }
+
+
+  _MeshHierarchy.push_back(newMesh);
+  _PtIdHierarchy.push_back(mapping);
+
+
+  if (mapPoints){
+    for (int nid=0; nid<numNewPts; nid++) {
+        id = mapping[nid];
+        _Input->GetPoint(id, p);
+        newMesh->GetPoints()->SetPoint(nid, p);
+    }
   }
 
 }
@@ -400,13 +501,10 @@ void MeshToSphere::ComputeMeshHierarchy(){
       _PtIdHierarchy.push_back(ptIds);
     }
 
-    /*
     if (_Debug) {
         string outName = "level" + std::to_string(l) + "-input-mesh.vtk";
         WritePolyData(outName.c_str(), _MeshHierarchy[_MeshHierarchy.size()-1]);
     }
-    */
-
   }
 }
 
@@ -810,6 +908,11 @@ void MeshToSphere::Run(){
 
     if (! p.smds.active || p.smds.maxIterations.value == 0){ continue; }
 
+	if (_Debug){
+		string outName = "level" + std::to_string(_CurrentLevel) + "_conn_mesh.vtk";
+	    WritePolyData(outName.c_str(), mesh);
+	}
+
     M2SConnectivity conn;
     conn.Input(mesh);
     conn.Threshold(p.smds.distThreshold.value);
@@ -821,6 +924,16 @@ void MeshToSphere::Run(){
     conn.Update();
 
     Array<Edge> edges = conn.Edges();
+
+	if (_Debug){
+		string outName = "level" + std::to_string(_CurrentLevel) + "_edges.txt";
+		ofstream out(outName);
+		for(int ei=0;ei<edges.size();ei++){
+		Edge e=edges[ei];
+		      out<<"edge "<<e.ptId1<<" "<<e.ptId2<<" "<<e.length<<" "<<e.weight1<<" "<<e.weight2<<endl;
+		}
+		out.close();
+	}
 
     M2SOptimizer optimizer;
     //optimizer.Edges(conn.Edges());
