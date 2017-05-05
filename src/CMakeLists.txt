@@ -1,11 +1,4 @@
 SET(SPHERICALMESH_INCLUDES
-
-../include/mirtk/VolumeToMesh.h
-../include/mirtk/ParticleSampleSphere.h
-../include/mirtk/SphereQuadrisect.h
-../include/mirtk/LaplacianSmoothFilter.h
-../include/mirtk/Remesher.h
-
 ../include/mirtk/M2SConnectivity.h
 ../include/mirtk/M2SDiffuser.h
 ../include/mirtk/M2SEdge.h
@@ -19,13 +12,6 @@ SET(SPHERICALMESH_INCLUDES
 )
 
 SET(SPHERICALMESH_SRCS
-
-VolumeToMesh.cc
-ParticleSampleSphere.cc
-SphereQuadrisect.cc
-LaplacianSmoothFilter.cc
-Remesher.cc
-
 M2SConnectivity.cc
 M2SDiffuser.cc
 M2SGeodesicInterpolator.cc

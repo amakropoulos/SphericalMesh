@@ -34,7 +34,6 @@ macro(add_mesh_executable name)
   add_executable(${name} ${name}.cc ${ARGN})
   target_link_libraries(${name} sphericalMesh)  
   target_link_libraries(${name} ${MIRTK_LIBRARIES})
-  #target_link_libraries(${name} "-lMIRTKPointSet -lMIRTKCommon -lMIRTKNumerics -lMIRTKImage -lMIRTKIO")
   target_link_libraries(${name} ${VTK_LIBRARIES})
 endmacro()
 
