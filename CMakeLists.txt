@@ -24,6 +24,8 @@ link_directories(Test ${VTK_LIBRARIES})
 if(UNIX)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=gnu++0x")
 endif()
+# this is set even for MAC to avoid errors
+add_definitions( -D__UNIX__=1)
 
 # set make output directories
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
