@@ -1,0 +1,219 @@
+Copyright
+---------
+
+All files in the ThirdParty/FastMarching folder are provided under a BSD license.
+Please see below for the copyright of the different files.
+
+------------------------------------------------------------------------------
+The following copyright applies to the files:
+include/vtkFastMarchingGeodesicDistance.h
+include/vtkFastMarchingGeodesicPath.h
+include/vtkPolyDataGeodesicDistance.h
+include/vtkPolygonalSurfaceContourLineInterpolator2.h
+src/vtkFastMarchingGeodesicDistance.cxx
+src/vtkFastMarchingGeodesicPath.cxx
+src/vtkPolyDataGeodesicDistance.cxx
+src/vtkPolygonalSurfaceContourLineInterpolator2.cxx
+
+
+Copyright (c) 2013 Karthik Krishnan
+All rights reserved.
+ 
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+ 
+    * Redistributions of source code must retain the above copyright notice,
+this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions and the following disclaimer in the documentation and/or
+other materials provided with the distribution.
+    * Neither name of LTSI, INSERM nor the names
+of any contributors may be used to endorse or promote products derived from this
+software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ``AS IS''
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE AUTHORS OR CONTRIBUTORS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+-------------------------------------------------------------------------------
+The following copyright applies to the files:
+include/GW_Complex.h
+include/GW_Config.h
+include/GW_Face.h
+include/GW_Face.inl
+include/GW_FaceIterator.h
+include/GW_GeodesicFace.h
+include/GW_GeodesicFace.inl
+include/GW_GeodesicMesh.h
+include/GW_GeodesicMesh.inl
+include/GW_GeodesicPath.h
+include/GW_GeodesicPath.inl
+include/GW_GeodesicPoint.h
+include/GW_GeodesicPoint.inl
+include/GW_GeodesicVertex.h
+include/GW_GeodesicVertex.inl
+include/GW_GeometryAtlas.h
+include/GW_GeometryAtlas.inl
+include/GW_GeometryCell.h
+include/GW_GeometryCell.inl
+include/GW_MathsConfig.h
+include/GW_Maths.h
+include/GW_MathsWrapper.h
+include/GW_Matrix2x2.h
+include/GW_Matrix3x3.h
+include/GW_Matrix4x4.h
+include/GW_MatrixNxP.h
+include/GW_MatrixStatic.h
+include/GW_Mesh.h
+include/GW_Mesh.inl
+include/GW_Parameterization.h
+include/GW_Parameterization.inl
+include/GW_PolygonIntersector.h
+include/GW_ProgressBar.h
+include/GW_Quaternion.h
+include/GW_Serializable.h
+include/GW_SmartCounter.h
+include/GW_SmartCounter.inl
+include/GW_SparseMatrix.h
+include/GW_TriangularInterpolation_ABC.h
+include/GW_TriangularInterpolation_Cubic.h
+include/GW_TriangularInterpolation_Cubic.inl
+include/GW_TriangularInterpolation.h
+include/GW_TriangularInterpolation.inl
+include/GW_TriangularInterpolation_Linear.h
+include/GW_TriangularInterpolation_Linear.inl
+include/GW_TriangularInterpolation_Quadratic.h
+include/GW_TriangularInterpolation_Quadratic.inl
+include/GW_Vector2D.h
+include/GW_Vector3D.h
+include/GW_Vector4D.h
+include/GW_VectorND.h
+include/GW_VectorStatic.h
+include/GW_Vertex.h
+include/GW_Vertex.inl
+include/GW_VertexIterator.h
+include/GW_VoronoiMesh.h
+include/GW_VoronoiMesh.inl
+include/GW_VoronoiVertex.h
+include/GW_VoronoiVertex.inl
+include/fmmtypes.h
+include/stdafx.h
+src/GW_Config.cpp
+src/GW_Face.cpp
+src/GW_Face.inl
+src/GW_FaceIterator.cpp
+src/GW_GeodesicFace.cpp
+src/GW_GeodesicFace.inl
+src/GW_GeodesicMesh.cpp
+src/GW_GeodesicMesh.inl
+src/GW_GeodesicPath.cpp
+src/GW_GeodesicPath.inl
+src/GW_GeodesicPoint.cpp
+src/GW_GeodesicPoint.inl
+src/GW_GeodesicVertex.cpp
+src/GW_GeodesicVertex.inl
+src/GW_GeometryAtlas.cpp
+src/GW_GeometryAtlas.inl
+src/GW_GeometryCell.cpp
+src/GW_GeometryCell.inl
+src/GW_Mesh.cpp
+src/GW_Mesh.inl
+src/GW_Parameterization.cpp
+src/GW_Parameterization.inl
+src/GW_SmartCounter.cpp
+src/GW_SmartCounter.inl
+src/GW_TriangularInterpolation.cpp
+src/GW_TriangularInterpolation_Cubic.cpp
+src/GW_TriangularInterpolation_Cubic.inl
+src/GW_TriangularInterpolation.inl
+src/GW_TriangularInterpolation_Linear.cpp
+src/GW_TriangularInterpolation_Linear.inl
+src/GW_TriangularInterpolation_Quadratic.cpp
+src/GW_TriangularInterpolation_Quadratic.inl
+src/GW_Vertex.cpp
+src/GW_Vertex.inl
+src/GW_VertexIterator.cpp
+src/GW_VoronoiMesh.cpp
+src/GW_VoronoiMesh.inl
+src/GW_VoronoiVertex.cpp
+src/GW_VoronoiVertex.inl
+src/stdafx.cpp
+
+
+Copyright (c) 2009, Gabriel Peyre
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without 
+modification, are permitted provided that the following conditions are 
+met:
+
+    * Redistributions of source code must retain the above copyright 
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright 
+      notice, this list of conditions and the following disclaimer in 
+      the documentation and/or other materials provided with the distribution
+      
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+POSSIBILITY OF SUCH DAMAGE.
+
+-------------------------------------------------------------------------------
+The following copyright applies to the files:
+include/fmmtypes.h
+include/jama_cholesky.h
+include/jama_eig.h
+include/jama_lu.h
+include/jama_qr.h
+include/jama_svd.h
+include/tnt_array1d.h
+include/tnt_array1d_utils.h
+include/tnt_array2d.h
+include/tnt_array2d_utils.h
+include/tnt_array3d.h
+include/tnt_array3d_utils.h
+include/tnt_cmat.h
+include/tnt_fortran_array1d.h
+include/tnt_fortran_array1d_utils.h
+include/tnt_fortran_array2d.h
+include/tnt_fortran_array2d_utils.h
+include/tnt_fortran_array3d.h
+include/tnt_fortran_array3d_utils.h
+include/tnt.h
+include/tnt_math_utils.h
+include/tnt_sparse_matrix_csr.h
+include/tnt_stopwatch.h
+include/tnt_subscript.h
+include/tnt_vec.h
+include/tnt_version.h
+
+
+* Template Numerical Toolkit (TNT)
+*
+* Mathematical and Computational Sciences Division
+* National Institute of Technology,
+* Gaithersburg, MD USA
+*
+*
+* This software was developed at the National Institute of Standards and
+* Technology (NIST) by employees of the Federal Government in the course
+* of their official duties. Pursuant to title 17 Section 105 of the
+* United States Code, this software is not subject to copyright protection
+* and is in the public domain. NIST assumes no responsibility whatsoever for
+* its use by other parties, and makes no guarantees, expressed or implied,
+* about its quality, reliability, or any other characteristic.
+
