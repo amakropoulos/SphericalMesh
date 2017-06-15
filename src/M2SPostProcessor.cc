@@ -2,12 +2,12 @@
 
 //mirtk includes
 #include "mirtk/Common.h"
-#include "mirtk/DeformableSurfaceModel.h"
-#include "mirtk/InflationForce.h"
-#include "mirtk/InflationStoppingCriterion.h"
+//#include "mirtk/DeformableSurfaceModel.h"
+// #include "mirtk/InflationForce.h"
+// #include "mirtk/InflationStoppingCriterion.h"
 #include "mirtk/LocalOptimizer.h"
-#include "mirtk/EulerMethodWithMomentum.h"
-#include "mirtk/MetricDistortion.h"
+// #include "mirtk/EulerMethodWithMomentum.h"
+// #include "mirtk/MetricDistortion.h"
 #include "mirtk/PointSetUtils.h"
 #include "mirtk/SparseMatrix.h"
 #include "mirtk/MeshSmoothing.h"
