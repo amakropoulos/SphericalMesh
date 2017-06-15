@@ -18,7 +18,7 @@
  */
 
 
-#include "mirtk/DeformableSurfaceModel.h"
+// #include "mirtk/DeformableSurfaceModel.h"
 #include "mirtk/MeshToSphere.h"
 
 #include "mirtk/Common.h"
@@ -45,6 +45,7 @@ void PrintHelp(const char *name)
   cout << "  Robert Wright's tool for embedding a mesh onto a sphere" << endl;
   cout << endl;
   cout << "Input options:" << endl;
+  cout << "  -inflated <inflated_mesh>    use inflated mesh to aid decimation (must have same topology as input mesh):" << endl;
 
   PrintCommonOptions(cout);
   cout << endl;
@@ -70,13 +71,15 @@ int main(int argc, char *argv[])
   vtkSmartPointer<vtkPolyData> input = ReadPolyData(POSARG(1));
 
   // Optional arguments
-  string parin = "";
+  string parin = "", inflated_name = "";
   bool debug = false;
 
   for (ALL_OPTIONS) {
     // Input
     if (OPTION("-parin") || OPTION("-pi")) parin = ARGUMENT;
-    else if (OPTION("-debug") || OPTION("-d")) debug = true;      
+    else if (OPTION("-debug") || OPTION("-d")) debug = true;
+    else if (OPTION("-inflated") || OPTION("-i")) inflated_name = ARGUMENT;
+
     else HANDLE_POINTSETIO_OPTION(fopt);
     else HANDLE_COMMON_OR_UNKNOWN_OPTION();
   }
@@ -98,44 +101,20 @@ int main(int argc, char *argv[])
   cout << parser.ToString();
   cout << endl;
 
-/*
-  MeshToSphere::Params p0;
-  p0.minEdgeLength = 4;
-  p0.maxEdgeLength = p0.minEdgeLength*2.2;
-  p0.connectivityDistanceThreshold = -1.0;
-  p0.maxIterations = 100;
+  //Read inflated mesh if given
+  vtkSmartPointer<vtkPolyData> inflated;
+  if (inflated_name != "")
+    inflated = ReadPolyData(inflated_name.c_str());
 
-  MeshToSphere::Params p1;
-  p1.minEdgeLength = 2;
-  p1.maxEdgeLength = p1.minEdgeLength*2.2;
-  p1.connectivityDistanceThreshold = 20;
-  p1.maxIterations = 50;
-
-  MeshToSphere::Params p2;
-  p2.minEdgeLength = 1;
-  p2.maxEdgeLength = p2.minEdgeLength*2.2;
-  p2.connectivityDistanceThreshold = 10;
-  p2.maxIterations = 25;
-
-  Array<MeshToSphere::Params> params;
-  //params.push_back(p0);
-  params.push_back(p1);
-  //params.push_back(p2);
-*/
 
   MeshToSphere m2s;
   m2s.Input(input);
+  if (inflated_name != "")
+    m2s.Inflated(inflated);
   m2s.Parameters(parser.GetParameters());
   m2s.Debug(debug);
   m2s.Run();
   vtkSmartPointer<vtkPolyData> output = m2s.Output();
 
-  // Center output point set
-  //if (center_output)
-
-  // Scale output surface to match input area
-  //if (match_area) Scale(output, sqrt(Area(input) / Area(output)));
-
-  //Write output surface
   return WritePolyData(POSARG(2), output, fopt);
 }

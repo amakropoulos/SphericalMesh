@@ -2,12 +2,12 @@
 
 //mirtk includes
 #include "mirtk/Common.h"
-#include "mirtk/DeformableSurfaceModel.h"
-#include "mirtk/InflationForce.h"
-#include "mirtk/InflationStoppingCriterion.h"
+// #include "mirtk/DeformableSurfaceModel.h"
+// #include "mirtk/InflationForce.h"
+// #include "mirtk/InflationStoppingCriterion.h"
 #include "mirtk/LocalOptimizer.h"
-#include "mirtk/EulerMethodWithMomentum.h"
-#include "mirtk/MetricDistortion.h"
+// #include "mirtk/EulerMethodWithMomentum.h"
+// #include "mirtk/MetricDistortion.h"
 #include "mirtk/PointSetUtils.h"
 #include "mirtk/PointSetIO.h"
 #include "mirtk/M2SRemesher.h"
@@ -90,6 +90,7 @@ void MeshToSphere::CopyAttributes(const MeshToSphere &other){
 void MeshToSphere::Initialize(){
   _Input = vtkSmartPointer<vtkPolyData>::New();
   _Output = vtkSmartPointer<vtkPolyData>::New();
+  _Inflated = NULL;
 }
 
 // -----------------------------------------------------------------------------
@@ -310,7 +311,14 @@ void MeshToSphere::Remesh(double minEdgeLength, double maxEdgeLength, bool mapPo
   int numOriginalPoints = _Input->GetNumberOfPoints();
 
   Remesher r;
-  r.Input(_Input);
+  if (_Inflated != NULL){
+    cout << "Using inflated mesh for to aid decimation" << endl;
+    r.Input(_Inflated);
+  }
+  else{
+    r.Input(_Input);
+  }
+
   r.MinEdgeLength(minEdgeLength);
   r.MaxEdgeLength(maxEdgeLength);
   r.MaxIterations(maxIterations);
@@ -326,7 +334,14 @@ void MeshToSphere::Remesh(double minEdgeLength, double maxEdgeLength, bool mapPo
   vtkSmartPointer<vtkKdTreePointLocator> tree
       = vtkSmartPointer<vtkKdTreePointLocator>::New();
 
-  tree->SetDataSet(_Input);
+  if (_Inflated != NULL){
+    cout << "Using inflated mesh to lookup original points" << endl;
+    tree->SetDataSet(_Inflated);
+  }
+  else{
+    tree->SetDataSet(_Input);
+  }
+
   tree->BuildLocator();
 
   double np [3], p [3];
@@ -374,7 +389,14 @@ void MeshToSphere::Remesh(double minEdgeLength, double maxEdgeLength, bool mapPo
     //replace remeshed point with nearest mesh point
     newMesh->GetPoint(nid, np);
     id = tree->FindClosestPoint(np);
-    _Input->GetPoint(id, p);
+
+    if (_Inflated != NULL){
+      _Inflated->GetPoint(id, p);
+    }
+    else{
+      _Input->GetPoint(id, p);
+    }
+
     dist = sqrt(vtkMath::Distance2BetweenPoints(p, np));
 
     Pair<int,int> pair = MakePair(nid, id);
@@ -382,6 +404,7 @@ void MeshToSphere::Remesh(double minEdgeLength, double maxEdgeLength, bool mapPo
     mapping.push_back(id);
 
     if(dist>maxdist) maxdist=dist;
+
   }
 
   OrderedSet<int> seen;
@@ -450,6 +473,16 @@ void MeshToSphere::Remesh(double minEdgeLength, double maxEdgeLength, bool mapPo
 
     seen.insert(id);
   }
+
+  //change points of new mesh back to original as opposed to inflated
+  if (_Inflated != NULL){
+    for (int nid=0; nid<numNewPts; nid++) {
+        id = mapping[nid];
+        _Input->GetPoint(id, p);
+        newMesh->GetPoints()->SetPoint(nid, p);
+    }
+  }
+
 
 
   _MeshHierarchy.push_back(newMesh);
@@ -587,11 +620,6 @@ void MeshToSphere::InterpolateAngles(int previousLevel, int nextLevel = -1){
   //retriangulate discontinuities areas
 
 
-
-  if (_Debug){
-    string outName = "level" + std::to_string(previousLevel) + "_post_processed.vtk";
-    WritePolyData(outName.c_str(), _Output);
-  }
 
   if (nextLevel != -1){
     vtkPolyData * nextMesh = _MeshHierarchy[nextLevel];
@@ -899,6 +927,13 @@ void MeshToSphere::Run(){
         pp.Run();
         _Output = pp.Output();
         EmbedPointsOnSphere(_Output);
+
+
+        if (_Debug){
+          string outName = "level" + std::to_string(_CurrentLevel-1) + "_post_processed.vtk";
+          WritePolyData(outName.c_str(), _Output);
+        }
+
       }
 
 
@@ -908,10 +943,10 @@ void MeshToSphere::Run(){
 
     if (! p.smds.active || p.smds.maxIterations.value == 0){ continue; }
 
-	if (_Debug){
-		string outName = "level" + std::to_string(_CurrentLevel) + "_conn_mesh.vtk";
-	    WritePolyData(outName.c_str(), mesh);
-	}
+  if (_Debug){
+    string outName = "level" + std::to_string(_CurrentLevel) + "_conn_mesh.vtk";
+      WritePolyData(outName.c_str(), mesh);
+  }
 
     M2SConnectivity conn;
     conn.Input(mesh);
@@ -925,15 +960,15 @@ void MeshToSphere::Run(){
 
     Array<Edge> edges = conn.Edges();
 
-	if (_Debug){
-		string outName = "level" + std::to_string(_CurrentLevel) + "_edges.txt";
-		ofstream out(outName);
-		for(int ei=0;ei<edges.size();ei++){
-		Edge e=edges[ei];
-		      out<<"edge "<<e.ptId1<<" "<<e.ptId2<<" "<<e.length<<" "<<e.weight1<<" "<<e.weight2<<endl;
-		}
-		out.close();
-	}
+  if (_Debug){
+    string outName = "level" + std::to_string(_CurrentLevel) + "_edges.txt";
+    ofstream out(outName);
+    for(int ei=0;ei<edges.size();ei++){
+    Edge e=edges[ei];
+          out<<"edge "<<e.ptId1<<" "<<e.ptId2<<" "<<e.length<<" "<<e.weight1<<" "<<e.weight2<<endl;
+    }
+    out.close();
+  }
 
     M2SOptimizer optimizer;
     //optimizer.Edges(conn.Edges());

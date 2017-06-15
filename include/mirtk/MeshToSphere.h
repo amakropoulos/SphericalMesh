@@ -46,7 +46,10 @@ class MeshToSphere {
 	// Attributes
 
   mirtkPublicAttributeMacro(vtkSmartPointer<vtkPolyData>, Input);
+  mirtkPublicAttributeMacro(vtkSmartPointer<vtkPolyData>, Inflated);
+
   mirtkPublicAttributeMacro(vtkSmartPointer<vtkPolyData>, Output);
+
   mirtkPublicAttributeMacro(EdgeTable, Edges);
   mirtkPublicAttributeMacro(Array<double>, TargetDistances);
   mirtkPublicAttributeMacro(Array<double>, CurrentSquareDistances);
