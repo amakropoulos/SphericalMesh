@@ -380,6 +380,14 @@ void MeshToSphere::Remesh(double minEdgeLength, double maxEdgeLength, bool mapPo
   */
 
 
+  vtkSmartPointer<vtkPolyData> corrMesh;
+  if (_Inflated != NULL){
+    corrMesh=_Inflated;
+  }
+  else{
+    corrMesh=_Input;
+  }
+
 
 
   int nid, id;
@@ -390,13 +398,7 @@ void MeshToSphere::Remesh(double minEdgeLength, double maxEdgeLength, bool mapPo
     newMesh->GetPoint(nid, np);
     id = tree->FindClosestPoint(np);
 
-    if (_Inflated != NULL){
-      _Inflated->GetPoint(id, p);
-    }
-    else{
-      _Input->GetPoint(id, p);
-    }
-
+    corrMesh->GetPoint(id, p);
     dist = sqrt(vtkMath::Distance2BetweenPoints(p, np));
 
     Pair<int,int> pair = MakePair(nid, id);
@@ -437,14 +439,14 @@ void MeshToSphere::Remesh(double minEdgeLength, double maxEdgeLength, bool mapPo
 
         if(seen.find(pointid) != seen.end()){
           vtkSmartPointer<vtkIdList> cellIds = vtkSmartPointer<vtkIdList>::New();
-          _Input->GetPointCells(pointid, cellIds);
+          corrMesh->GetPointCells(pointid, cellIds);
           for (int i=0; i<cellIds->GetNumberOfIds(); i++){
             vtkSmartPointer<vtkIdList> pointIds = vtkSmartPointer<vtkIdList>::New();
-            _Input->GetCellPoints(cellIds->GetId(i), pointIds);
+            corrMesh->GetCellPoints(cellIds->GetId(i), pointIds);
             for (int j=0; j<pointIds->GetNumberOfIds(); j++){
               nnpointid=pointIds->GetId(j);
               if(visited.find(nnpointid) != visited.end()) continue;
-              _Input->GetPoint(nnpointid, p);
+              corrMesh->GetPoint(nnpointid, p);
               nnpointdist = sqrt(vtkMath::Distance2BetweenPoints(p, np));
               nnpoints[nnpointdist] = nnpointid;
             }
@@ -455,11 +457,9 @@ void MeshToSphere::Remesh(double minEdgeLength, double maxEdgeLength, bool mapPo
         }
       }
 
-
       // The distance must be within the range of the existing distances
       if( found && pointdist <= 1.5*maxdist ){
-        cout<<"replaced id due to duplicate for point in new mesh "<<nid<<": point in old mesh "<<id<<"->"<<pointid<<",  distance "<<dist<<"->"<<pointdist<<endl;
-        cout<<"maxdist: "<<maxdist<<endl;
+        cout<<"replaced id due to duplicate for point in new mesh "<<nid<<": point in old mesh "<<id<<"->"<<pointid<<",  distance "<<dist<<"->"<<pointdist<<" - maxdist: "<<maxdist<<endl;
         id = pointid;
         mapping[nid]=id;
       }
