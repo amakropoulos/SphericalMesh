@@ -193,9 +193,10 @@ int vtkPolygonalSurfaceContourLineInterpolator2::InterpolateLine(
   vtkPolyData *pd = this->GeodesicPath->GetOutput();
 
   // We assume there's only one cell of course
-  vtkIdType npts = 0, *pts = NULL;
+  vtkNew<vtkIdList> pts;
   pd->GetLines()->InitTraversal();
-  pd->GetLines()->GetNextCell( npts, pts );
+  pd->GetLines()->GetNextCell(pts.GetPointer());
+  vtkIdType npts = pts->GetNumberOfIds();
 
   // Get the vertex normals if there is a height offset. The offset at
   // each node of the graph is in the direction of the vertex normal.
@@ -209,7 +210,7 @@ int vtkPolygonalSurfaceContourLineInterpolator2::InterpolateLine(
 
   for (int n = 0; n < npts; n++)
     {
-    pd->GetPoint( pts[n], p );
+    pd->GetPoint( pts->GetId(n), p );
 
     // This is the id of the closest point on the polygonal surface.
     const vtkIdType ptId = vertexIds->GetId(n);

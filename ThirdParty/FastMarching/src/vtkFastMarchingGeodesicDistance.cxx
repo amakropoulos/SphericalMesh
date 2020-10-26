@@ -254,7 +254,7 @@ void vtkFastMarchingGeodesicDistance::SetupGeodesicMesh( vtkPolyData *in )
       mesh->SetVertex( i, &point );
       }
 
-    vtkIdType *ptIds = 0, npts;
+    vtkNew<vtkIdList> ptIds;
     const int nCells = in->GetNumberOfPolys();
     vtkCellArray *cells = in->GetPolys();
     if (!cells)
@@ -272,10 +272,10 @@ void vtkFastMarchingGeodesicDistance::SetupGeodesicMesh( vtkPolyData *in )
       //    VTK_POLYGON, or VTK_TRIANGLE_STRIP.
 
       // only handle triangles
-      cells->GetNextCell(npts, ptIds);
+      cells->GetNextCell(ptIds.GetPointer());
 
       // bail out
-      if (npts != 3)
+      if (ptIds->GetNumberOfIds() != 3)
         {
         vtkErrorMacro( << "This filter can only work with triangle meshes." );
         delete this->Internals->Mesh;
@@ -284,9 +284,9 @@ void vtkFastMarchingGeodesicDistance::SetupGeodesicMesh( vtkPolyData *in )
         }
 
       GW::GW_GeodesicFace& cell = (GW::GW_GeodesicFace &) mesh->CreateNewFace();
-      GW::GW_Vertex* a = mesh->GetVertex(ptIds[0]);
-      GW::GW_Vertex* b = mesh->GetVertex(ptIds[1]);
-      GW::GW_Vertex* c = mesh->GetVertex(ptIds[2]);
+      GW::GW_Vertex* a = mesh->GetVertex(ptIds->GetId(0));
+      GW::GW_Vertex* b = mesh->GetVertex(ptIds->GetId(1));
+      GW::GW_Vertex* c = mesh->GetVertex(ptIds->GetId(2));
       cell.SetVertex( *a, *b, *c );
       mesh->SetFace( i, &cell );
       }

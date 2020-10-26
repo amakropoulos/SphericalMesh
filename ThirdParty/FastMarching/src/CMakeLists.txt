@@ -48,3 +48,4 @@ set(DEPENDS
 
 include_directories(../include)
 ADD_LIBRARY(fastMarchingGeodesic ${HEADERS} ${SOURCES})
+target_link_libraries(fastMarchingGeodesic ${VTK_LIBRARIES})

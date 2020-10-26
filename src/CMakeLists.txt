@@ -25,3 +25,5 @@ M2SRemesher.cc
 
 include_directories(../ThirdParty/FastMarching/include)
 ADD_LIBRARY(sphericalMesh ${SPHERICALMESH_INCLUDES} ${SPHERICALMESH_SRCS})
+target_link_libraries(sphericalMesh ${VTK_LIBRARIES})
+
