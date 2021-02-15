@@ -5,15 +5,16 @@ cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 find_package(MIRTK REQUIRED)
 include_directories(${MIRTK_INCLUDE_DIRS})
 link_directories(${MIRTK_LIBRARY_DIRS})
+
 # find MIRTK libraries
+message ("modules =" ${MIRTK_MODULES_ENABLED})
 foreach (mirtklib IN ITEMS ${MIRTK_MODULES_ENABLED})
-  string(COMPARE NOTEQUAL "${mirtklib}" "Applications" mirtklibkeep)
-  if (${mirtklibkeep})
+  if(NOT(mirtklib STREQUAL "Applications" OR mirtklib STREQUAL "Scripting"))
     set(MIRTK_LIBRARIES "${MIRTK_LIBRARIES} -lMIRTK${mirtklib}")
   endif()
 endforeach ()
 string(STRIP ${MIRTK_LIBRARIES} MIRTK_LIBRARIES)
-MESSAGE( STATUS "MIRTK_LIBRARIES:         " ${MIRTK_LIBRARIES} )
+MESSAGE(STATUS "MIRTK_LIBRARIES: " ${MIRTK_LIBRARIES} )
 
 # VTK
 find_package(VTK REQUIRED)
